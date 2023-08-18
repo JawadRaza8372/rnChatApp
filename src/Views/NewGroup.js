@@ -123,7 +123,13 @@ const NewGroup = ({navigation}) => {
                   data={groupMembers}
                   ListEmptyComponent={
                     <View style={styles.memberdiv}>
-                      <Text>No Members Yet</Text>
+                      <Text
+                        style={{
+                          color: secColor,
+                          fontSize: h('2.3%'),
+                        }}>
+                        No Members Yet
+                      </Text>
                     </View>
                   }
                   renderItem={({item, index}) => (
@@ -154,7 +160,7 @@ const NewGroup = ({navigation}) => {
         <CustomAuthBtn
           title={'Create'}
           bgColor={mainColor}
-          onClickfun={() => navigation.navigate('ChatScreen')}
+          onClickfun={() => navigation.replace('ChatScreen')}
         />
       </View>
     </SafeAreaView>

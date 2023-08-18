@@ -2,7 +2,7 @@ import {StyleSheet, Text, TextInput, View} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {w, h} from 'react-native-responsiveness';
 import {inActiveColor, secColor} from '../AppColors';
-const CustomTextInput = ({label, value, onChangeFunct}) => {
+const CustomTextInput = ({label, value, onChangeFunct, color}) => {
   // value = "2837";
   const [isfocused, setisfocused] = useState(false);
   useEffect(() => {
@@ -16,24 +16,27 @@ const CustomTextInput = ({label, value, onChangeFunct}) => {
   const styles = StyleSheet.create({
     inputcontainer: {
       width: w('85%'),
-      height: h('6.5%'),
+      height: h('8%'),
       position: 'relative',
+      borderWidth: 0,
+      borderBottomWidth: 2,
+      borderColor: color ? color : secColor,
+      marginBottom: h('3%'),
     },
     textinput: {
       width: '100%',
-      height: '100%',
-      borderWidth: 0,
-      borderBottomWidth: 2,
-      borderColor: secColor,
+      height: h('5.5%'),
       fontSize: h('2.5%'),
-      marginTop: h('1%'),
-      color: secColor,
+      color: color ? color : secColor,
+      position: 'absolute',
+      bottom: 0,
     },
     mylabel: {
       position: 'absolute',
-      bottom: isfocused ? h('4.2%') : h('0.8%'),
+      bottom: isfocused ? h('3%') : h('0.8%'),
       fontSize: isfocused ? h('1.8%') : h('2.5%'),
-      color: secColor,
+      marginBottom: isfocused ? h('2%') : 0,
+      color: color ? color : secColor,
     },
   });
 

@@ -1,4 +1,4 @@
-const mainColor = '#FFAA00';
+const mainColor = '#1273EB';
 const secColor = 'white';
 const inActiveColor = 'grey';
 const lightbg = '#D8E9A8';

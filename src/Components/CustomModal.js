@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import {w, h} from 'react-native-responsiveness';
-import {secColor} from '../AppColors';
+import {inActiveColor, secColor} from '../AppColors';
 const CustomModal = ({modalval, changeVal, data}) => {
   return (
     <>
@@ -65,6 +65,8 @@ const styles = StyleSheet.create({
   },
   manuecont: {
     backgroundColor: secColor,
+    borderWidth: 0.3,
+    borderColor: inActiveColor,
     width: '60%',
     alignSelf: 'flex-end',
     display: 'flex',

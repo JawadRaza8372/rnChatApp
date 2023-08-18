@@ -12,21 +12,23 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import ScreenHeader from '../Components/ScreenHeader';
-import ChatInfoHead from '../Components/ChatInfoHead';
-import MesgSendComp from '../Components/MesgSendComp';
 import {w, h} from 'react-native-responsiveness';
-import MyMsg from '../Components/MyMsg';
 import HomeScreenHeader from '../Components/HomeScreenHeader';
 import ChatRoomItem from '../Components/ChatRoomItem';
 import CustomModal from '../Components/CustomModal';
-import {mainColor, secColor} from '../AppColors';
+import {inActiveColor, mainColor, secColor} from '../AppColors';
 import Entypo from 'react-native-vector-icons/Entypo';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 const ChatListScreen = ({navigation}) => {
   const data = [
     {id: '21', name: 'Jawad', lastmsg: 'I am good'},
     {id: '12', name: 'Hamad', lastmsg: 'Thanks Man'},
     {id: '343', name: 'Umer', lastmsg: 'good'},
+  ];
+  const groupdata = [
+    {id: '23', name: 'Friends Forever', lastmsg: 'I am good'},
+    {id: '14', name: 'Chemistry Class', lastmsg: 'Thanks Man'},
+    {id: '353', name: 'Physics Class', lastmsg: 'good'},
   ];
   const manuitems = [
     {
@@ -34,19 +36,18 @@ const ChatListScreen = ({navigation}) => {
       pressFunct: () => navigation.navigate('ProfileScreen'),
     },
     {label: 'Logout', pressFunct: () => alert('Logout')},
-    {label: 'Theme', pressFunct: () => navigation.navigate('ThemeScreen')},
-    {label: 'New Group', pressFunct: () => navigation.navigate('NewGroup')},
-    {label: 'New Messages', pressFunct: () => navigation.navigate('NewMsg')},
   ];
   const [modalVisible, setmodalVisible] = useState(false);
   const [searchModal, setsearchModal] = useState(false);
   const [searchTxt, setsearchTxt] = useState('');
   const filteredData = () => {
-    const filtrd = data?.filter(dat =>
+    const newdata = [...data, ...groupdata];
+    const filtrd = newdata?.filter(dat =>
       `${dat?.name}`.toLowerCase().includes(searchTxt.toLowerCase()),
     );
     return filtrd;
   };
+  const [isChats, setisChats] = useState(true);
   return (
     <SafeAreaView style={styles.bgdiv}>
       <HomeScreenHeader
@@ -55,18 +56,70 @@ const ChatListScreen = ({navigation}) => {
         isSearchFun={() => setsearchModal(!searchModal)}
       />
       <View style={{width: '100%', flex: 1}}>
-        <FlatList
-          data={data}
-          keyExtractor={item => item.id}
-          renderItem={({item}) => {
-            return (
-              <TouchableOpacity
-                onPress={() => navigation.navigate('ChatScreen')}>
-                <ChatRoomItem name={item.name} lastmsg={item.lastmsg} />
-              </TouchableOpacity>
-            );
-          }}
-        />
+        <View style={styles.groupTopBardiv}>
+          <TouchableOpacity
+            onPress={() => setisChats(true)}
+            style={{
+              ...styles.partBtn,
+              backgroundColor: isChats ? secColor : 'transparent',
+            }}>
+            <Text
+              style={{
+                ...styles.partBtnTxt,
+                color: isChats ? mainColor : inActiveColor,
+                fontWeight: isChats ? 'bold' : 'normal',
+              }}>
+              Chats
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => setisChats(false)}
+            style={{
+              ...styles.partBtn,
+              backgroundColor: isChats ? 'transparent' : secColor,
+            }}>
+            <Text
+              style={{
+                ...styles.partBtnTxt,
+                color: isChats ? inActiveColor : mainColor,
+                fontWeight: !isChats ? 'bold' : 'normal',
+              }}>
+              Groups
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <View
+          style={{
+            width: '100%',
+            flex: 1,
+            backgroundColor: secColor,
+            paddingTop: h('2%'),
+            position: 'relative',
+          }}>
+          <View style={styles.addBtnContainer}>
+            <TouchableOpacity
+              onPress={() => {
+                isChats
+                  ? navigation.navigate('NewMsg')
+                  : navigation.navigate('NewGroup');
+              }}
+              style={styles.addBtnCircle}>
+              <Ionicons name="add" size={h('4.5%')} color={secColor} />
+            </TouchableOpacity>
+          </View>
+          <FlatList
+            data={isChats ? data : groupdata}
+            keyExtractor={item => item.id}
+            renderItem={({item}) => {
+              return (
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('ChatScreen')}>
+                  <ChatRoomItem name={item.name} lastmsg={item.lastmsg} />
+                </TouchableOpacity>
+              );
+            }}
+          />
+        </View>
       </View>
       <CustomModal
         data={manuitems}
@@ -120,6 +173,41 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
+  addBtnContainer: {
+    position: 'absolute',
+    top: h('70%'),
+    right: w('2%'),
+    height: h('8%'),
+    backgroundColor: 'transparent',
+    marginBottom: h('2%'),
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    flexDirection: 'row',
+    alignSelf: 'center',
+    overflow: 'hidden',
+    zIndex: 2,
+  },
+  groupTopBardiv: {
+    width: '100%',
+    height: h('7%'),
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    flexDirection: 'row',
+  },
+  partBtn: {
+    width: '45%',
+    height: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderTopLeftRadius: h('2%'),
+    borderTopRightRadius: h('2%'),
+  },
+  partBtnTxt: {
+    fontSize: h('2.5%'),
+  },
   searchInputCont: {
     height: '100%',
     flex: 1,
@@ -166,5 +254,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
+  },
+  addBtnCircle: {
+    height: h('8%'),
+    width: h('8%'),
+    backgroundColor: mainColor,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: h('8%'),
   },
 });
